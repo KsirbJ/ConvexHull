@@ -123,7 +123,7 @@ int main(int argc, char const *argv[], char *envp[]){
 		FILE *f;
 		f = fopen(out_file, "w+");
 		int k = 0;
-		fprintf(f, "%d\n", num_of_nums);
+		//fprintf(f, "%d\n", num_of_nums);
 		while(k < num_of_nums){
 			fprintf(f, "%d\n", rand_ints[k] );
 			++k;

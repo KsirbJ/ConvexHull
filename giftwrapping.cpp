@@ -18,7 +18,7 @@ struct point {
  *	@param p1, p2, p3 - The 3 points to check
  *	@return - The difference in their slopes
  */
-int slope_difference(point p1, point p2, point p3){
+int orientation(point p1, point p2, point p3){
 	return (p2.y - p1.y)*(p3.x - p2.x) - (p2.x - p1.x)*(p3.y - p1.y);
 
 }
@@ -33,12 +33,13 @@ int slope_difference(point p1, point p2, point p3){
 vector<point> do_giftwrapping(vector<point> points){
 
 	// If there's less than 4 points, they all form the convex hull
-	if(points.size() < 4)
+	int size = points.size();
+	if(size < 4)
 		return points;
 
 	// Find the leftmost point
 	int leftmost = 0;
-	for(int i = 0; i < points.size(); ++i){
+	for(int i = 0; i < size; ++i){
 		if(points[i].x < points[leftmost].x){
 			leftmost = i;
 		}else if(points[i].x == points[leftmost].x){
@@ -51,7 +52,6 @@ vector<point> do_giftwrapping(vector<point> points){
 	vector<point> hull;
 
 	int p = leftmost, q = 0;
-	int size = points.size();
 
 	do {
 		// Add the last point we found
@@ -61,7 +61,7 @@ vector<point> do_giftwrapping(vector<point> points){
 		q = (p+1)%size;
 
 		for(int i = 0; i < size; ++i){
-			if(slope_difference(points[p], points[i], points[q]) > 0 )
+			if(orientation(points[p], points[i], points[q]) > 0 )
 				q = i;
 		}
 
@@ -81,8 +81,8 @@ int main(int argc, char const *argv[])
 
     vector<point> res(do_giftwrapping(p));
 
-    for(int i = 0; i < res.size(); ++i){
-    	cout << "(" << res[i].x << "," << res[i].y << ")" << endl;
+    for(point p: res){
+    	cout << "(" << p.x << "," << p.y << ")" << endl;
     }
 	return 0;
 
