@@ -3,22 +3,6 @@
 #include <algorithm>
 using namespace std;
 
-
-/**
- *	Gets the second to last point from a stack
- *
- *	@param points - stack of points to get the second to last point from
- *	@return - the second to last point in the stack
- */
-point secondToLast(stack<point> &points)
-{
-  point temp = points.top();
-  points.pop();
-  point secToLast = points.top();
-  points.push(temp);
-  return secToLast;
-}
-
 /**
 *	Simulate the graham scan algorithm
 *
@@ -55,51 +39,51 @@ int doGrahamscan(vector<point> points){
   sort(points.begin() + 1, points.end());
 
 
-  // Remove collinear points
-  int new_size = 1; 
+  // Remove points that are collinear with p0
+  vector<point> points_;
+  points_.push_back(p0);
+
+  // Copy all points that are not collinear to p0 to a new vector
   for (int i=1; i<n; i++){
-       // Keep removing i while angle of i and i+1 is same
-       // with respect to p0
     while (i < n-1 && orientation(p0, points[i], points[i+1]) == 0)
           i++;
 
-    points[new_size] = points[i];
-    new_size++;
+    points_.push_back(points[i]);
   }
 
   // Only look at first m points. Rest are collinear
-  n = new_size;
+  n = points_.size();
 
-  //Initialize stack for hull points
-  stack<point> hull;
+  if(n < 4)
+    return n;
+
+  //Initialize vector for hull points
+  vector<point> hull;
+  hull.reserve(points_.size());
   //Push first three points in hull
-  hull.push(points[0]);
-  hull.push(points[1]);
-  hull.push(points[2]);
+  hull.push_back(points_[0]);
+  hull.push_back(points_[1]);
+  hull.push_back(points_[2]);
+
+  int j = 2;
 
 
   //loops through the array to check for each being on the hull
   for (int i = 3; i < n; i++)
   {
-    while (orientation(secondToLast(hull), hull.top(), points[i]) > 0)
+    while (orientation(hull[j-1], hull[j], points_[i]) > 0)
     {
-      if(hull.size() > 1)
-        hull.pop();
-      else if(i == n)  // All collinear
-        break;
-      else
+      if(j > 1){
+        hull.pop_back();
+        j--;
+      }else
         i++;  // Try next point
       
     }
-    hull.push(points[i]);
+    hull.push_back(points_[i]);
+    j++;
   }
 
-  // if(n < 100000){
-  //   for(int k = 0; k < j; ++k){
-  //     point p = hull.top();
-  //     hull.pop();
-  //     cout << "{" <<  p.x << "," << p.y <<  "}," << endl;    
-  //   }
-  // }
+
   return hull.size();
 }

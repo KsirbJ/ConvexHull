@@ -27,7 +27,6 @@ int do_giftwrapping(vector<point> &points){
 	int convex_points = 0;
 
 	int p = leftmost, q = 0;
-	int i = 0;
 	do {
 		// Add the last point we found
 		convex_points++;
@@ -43,7 +42,6 @@ int do_giftwrapping(vector<point> &points){
 		}
 
 		p = q;
-		i++;
 
 	}while(leftmost != p);
 
