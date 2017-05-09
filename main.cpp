@@ -6,7 +6,7 @@
 #include "giftwrapping.cpp"
 #include "grahamscan.cpp"
 #include <set>
-#include <math.h>
+
 
 using namespace std;
 
@@ -38,11 +38,9 @@ int main(int argc, char const *argv[])
 		}
 
 
-		// Copy to vector for easier use
+		// Copy to vector for easier use (slow but easy way to filter duplicates)
 		vector<point> points(points_.begin(), points_.end());
 
-		//sort(points.begin(), points.end());
-		//points.erase(unique(points.begin(), points.end()), points.end());
 		
 		// start timing the program execution
 		auto start = chrono::high_resolution_clock::now();
@@ -52,28 +50,24 @@ int main(int argc, char const *argv[])
 		auto end = chrono::high_resolution_clock::now();
 		// calculate the duration
 		auto span = chrono::duration_cast<chrono::duration<double>>(end - start);
+		cout << "For "<< sizes[i] << " points:" << endl;
 
-		cout << "Gifwrapping took " << span.count() << " seconds for " << sizes[i] << " points." << endl;
-		cout << "Number of points on the hull: " << res << endl;
+		cout << "\tGifwrapping took " << span.count() << endl;
+		
 
 		auto start2 = chrono::high_resolution_clock::now();
-		int res2 = doGrahamscan(points);
+		doGrahamscan(points);
 		auto end2 = chrono::high_resolution_clock::now();
 		auto span2 = chrono::duration_cast<chrono::duration<double>>(end2 - start2);
 
 		
-		cout << "Graham Scan took " << span2.count() << " seconds for " << sizes[i] << " points." << endl;
-		cout << "Number of points on the hull: " << res2 << endl;
+		cout << "\tGraham Scan took " << span2.count() << endl;
+
+		cout << "\tNumber of points on the hull: " << res << endl << endl;
 		inx.close();
 		iny.close();
 
 	}
-
-
-	// vector<point> p = {{876, 911}, {935, 481}, {973, 510}, {625, 5},
- //                      {843, 352}, {810, 14}, {980, 775}, {759,910}, {83,411}, {874, 836}};
-
- //    cout <<  do_giftwrapping(p) << endl;
 
   	return 0;
 

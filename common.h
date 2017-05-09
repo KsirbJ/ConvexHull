@@ -1,7 +1,6 @@
 #include <string>
 #include <iostream>
 #include <vector>
-#include <math.h>
 
 
 // A point, has x and y. 

@@ -1,5 +1,3 @@
-#include <stack>
-#include <stdlib.h>
 #include <algorithm>
 using namespace std;
 
